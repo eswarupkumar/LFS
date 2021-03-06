@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.navbar{
+    background-color: #355C7D;
+    display: flex;
+    justify-content: space-between;
+}
+.logo{
+    margin: 10px 0px 10px 10px;
+}
+.logo>h2{
+    color: white;
+    font-size: 35px;
+}
+.signin{
+    color: white;
+    display: flex;
+}
+.signin>ul{
+    margin: 15px 10px 0px 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.signin>ul:hover{
+    color: black;
+}
+a{
+    color: inherit;
+}
