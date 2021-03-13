@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import '../css/Signup.css'
+import '../css/newSignup.css'
 import axios from 'axios'
 import { Redirect, useHistory } from "react-router-dom"
 import Navbar from '../Components/Navbar'
@@ -8,12 +8,12 @@ import Navbar from '../Components/Navbar'
 
 function Login() {
     let [info,setinfo]=useState('')
-    
+    const [user_info,setuser_info]=useState('')
     const history = useHistory()
     function login(){
         // console.log(setinfo)
         var payload={
-            username:document.getElementById('username').value,
+            email:document.getElementById('email').value,
             password:document.getElementById('password').value
         }
         axios({
@@ -27,7 +27,7 @@ function Login() {
         .then(response => { 
             // console.log("Response is :",response)
             if(response.data.user){     //Authentication done.
-                console.log(response)
+                setuser_info(response.data.user)
                 localStorage.setItem("token",response.data.jwt_token)
                 history.push('/feed')
             }
@@ -69,12 +69,12 @@ function Login() {
     
         return (
             <>
-                <Navbar/>
+                <Navbar info={user_info}/>
                 <div>
-                <form className="Box" >
+                <form className="Box-1" >
                     <h1>Log in</h1>
                     <p style={{color:'white'}}>{info}</p>
-                    <input type="text" name="username" id='username' placeholder="User Name" required  />
+                    <input type="text" name="email" id='email' placeholder="Email id" required  />
                     <input type="password" placeholder="Password" id="password" name="password" required  />
                     {/* <input type="submit" placeholder="Submit"></input> */}
                     <button type="button" className='submit' onClick={login}>Submit</button>

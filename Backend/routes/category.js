@@ -74,7 +74,7 @@ router.post("/founditem", requireSignin, userMiddleware, async (req, res) => {
     res.status(401).json(err.message);
   }
 });
-router.get("/getitem", (req, res) => {
+router.get("/getitem",(req, res) => {
   postitem.find({}).exec((err, postitems) => {
     if (err) return res.status(400).json({ err });
     if (postitems) {

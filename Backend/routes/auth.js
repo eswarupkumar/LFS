@@ -87,9 +87,9 @@ checkField=(req,res,next)=>{
 
 
 checkFieldLogin=(req,res,next)=>{
-    var username=req.body.username
+    var email=req.body.email
     var password=req.body.password
-    if(!username || !password){
+    if(!email || !password){
         console.log('Please enter all the fields')
         res.send('Please enter all the fields')
     }
@@ -154,6 +154,7 @@ router.post('/signup',checkField,checkUsername,checkPassword,async (req,res)=>{
     // })
 
     try{
+        // console.log(firstname,lastname,email,password)
         const newSignup = await Signup.create({
             firstname:firstname,
             lastname:lastname,
@@ -170,18 +171,19 @@ router.post('/signup',checkField,checkUsername,checkPassword,async (req,res)=>{
 })
 router.post('/login',checkFieldLogin,(req,res,next)=>{
     console.log('Login :',req.body)
-    const username=req.body.username
+    const email=req.body.email
     const password=req.body.password
 
-    var checkUser=Signup.findOne({username:username})
+    var checkUser=Signup.findOne({email:email})
     // console.log(checkUser)
     checkUser.exec((err,data)=>{
         // console.log("Inside execution")
         if(!data){
             console.log('Not exist')
-            res.send("Username does not exist")
+            res.send("Email does not exist")
         }
         else{
+            // console.log(data)
             var dbpassword=data.password
             if(dbpassword==password){
                 console.log("Logging in")

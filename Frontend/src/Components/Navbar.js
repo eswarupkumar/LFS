@@ -7,8 +7,9 @@ import { Button, Modal, Form } from "react-bootstrap";
 import Lost_item from "./Lost_item";
 import Found_item from "./Found_item";
 // import Login from './Login'
-function Navbar() {
+function Navbar(props) {
   const token = window.localStorage.getItem("token");
+  console.log(props)
   // console.log("Status :", LOGGED_IN)
   const signout = () => {
     // constraint.LOGGED_IN = false;
@@ -55,6 +56,7 @@ function Navbar() {
           <Lost_item />
           {/* <Found_item /> */}
           <ul>
+            {/* {props.name} */}
             <a onClick={signout} href="/log-in">
               Sign-out
             </a>
