@@ -29,7 +29,8 @@ function Login() {
             if(response.data.user){     //Authentication done.
                 setuser_info(response.data.user)
                 localStorage.setItem("token",response.data.jwt_token)
-                history.push('/feed')
+                // console.log(response.data.user)
+                history.push({pathname:'/feed',user:response.data.user})
             }
             else{
                 setinfo(response.data)
@@ -69,7 +70,7 @@ function Login() {
     
         return (
             <>
-                <Navbar info={user_info}/>
+                <Navbar/>
                 <div>
                 <form className="Box-1" >
                     <h1>Log in</h1>

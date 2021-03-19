@@ -38,6 +38,7 @@ export default class Signup extends Component {
       firstname: document.getElementById("firstname").value,
       lastname: document.getElementById("lastname").value,
       email: document.getElementById("email").value,
+      number: document.getElementById("number").value,
       password: document.getElementById("password").value,
       cpassword: document.getElementById("cpassword").value,
     };
@@ -110,6 +111,15 @@ export default class Signup extends Component {
               required
               onChange={(e) => {
                 this.setState({ username: e.target.value });
+              }}
+            />
+            <input
+              type="number"
+              id="number"
+              placeholder="Phone Number"
+              required
+              onChange={(e) => {
+                this.setState({ number: e.target.value });
               }}
             />
             {/* <input type="text" name="username" id='username' placeholder="User Name" required onChange={(e)=>{this.setState({username:e.target.value})}} /> */}

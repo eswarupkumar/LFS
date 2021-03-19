@@ -116,4 +116,51 @@ router.get('/item/:id',(req,res)=>{
     })
   })
 })
+
+router.post('/edititem',async (req,res)=>{
+  const {id,name,description,type,createdBy}=req.body
+  // console.log(req.body)
+  // console.log(id)
+  item={
+    name:name,
+    description:description,
+    type:type,
+    createdBy:createdBy 
+  }
+  // console.log(item)
+  const updateItem=await postitem.findOneAndUpdate({_id:id},item,{new:true}) 
+  res.status(200).json({
+    updateItem
+  })
+})
+
+router.post('/deleteitem',async (req,res)=>{
+  const {item_id}=req.body
+  console.log("Item id is :",item_id)
+  const deleteitem=await postitem.findOneAndDelete({_id:item_id})
+  res.status(200).json({
+    body:req.body
+  })
+})
+
+router.get('/getnumber/:id',(req,res)=>{
+  const {id}=req.params
+  console.log("Id is :",id)
+  postitem.find({_id:id})
+  .exec((err,item)=>{
+    if(err) return res.status(400).json({'Error':err})
+
+    // console.log(item)
+    // console.log(item[0].createdBy)
+    const createdBy=item[0].createdBy
+    SignUp.find({_id:createdBy}).exec((err,user)=>{
+      res.status(200).json({
+        'Number':user[0].number
+      })
+    })
+  })
+})
+
 module.exports = router;
+
+

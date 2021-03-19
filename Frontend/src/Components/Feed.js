@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { LOGGED_IN, setConstraint } from "../constraints";
+import { useLocation } from "react-router-dom";
+import { NEW_USER, setConstraint, setUser } from "../constraints";
 import Navbar from "../Components/Navbar";
 import Axios from "axios";
 import {
@@ -13,10 +14,18 @@ import {
 
 export default function Feed() {
   // console.log("Status :", LOGGED_IN)
+  const location = useLocation();
+  const user_info=location.user
+  console.log("User info is :", location.user);
   setConstraint(true);
+  // var user_info
+  // if(NEW_USER===false){
+  //   user_info=location.user
+  //   setUser(true)
+  // }
   // console.log(constraint.LOGGED_IN);
   const [item, setitem] = useState("");
-  const [Found_item, setFound_item] = useState("");
+  const [Found_item, setFound_item] = useState();
   useEffect(() => {
     // console.log("Test");
     Axios({
@@ -62,9 +71,15 @@ export default function Feed() {
           // });
 
           if (item.type === "Lost") {
-            console.log(item.name+' '+item.type);
+            let user = false;
+            if (item.createdBy === location.user._id) {
+              user = true;
+            }
+            console.log(item.name + " " + item.type);
             items.push(
-              <a href={`/${item.name}?cid=${item._id}&type=${item.type}`}>
+              <a
+                href={`/${item.name}?cid=${item._id}&type=${item.type}/${user}`}
+              >
                 <Col key={item.name} style={{ marginTop: "2%" }} md={3}>
                   {/* <li key={item.name}>{item.name}</li>
                 <li key={item.description}>{item.description}</li> */}
@@ -97,10 +112,14 @@ export default function Feed() {
               </a>
             );
           } else {
-            console.log(item.name+' '+item.type);
+            var user = false;
+            if (item.createdBy === location.user._id) {
+              user=true
+            }
+            console.log(item.name + " " + item.type);
             Found_items.push(
-              <a href={`/${item.name}?cid=${item._id}&type=${item.type}`}>
-                <Col  style={{ marginTop: "2%" }} md={3}>
+              <a href={`/${item.name}?cid=${item._id}&type=${item.type}/${user}`}>
+                <Col style={{ marginTop: "2%" }} md={3}>
                   {/* <li key={item.name}>{item.name}</li>
                 <li key={item.description}>{item.description}</li> */}
                   <Card key={item.name} style={{ width: "17rem" }}>
@@ -134,7 +153,7 @@ export default function Feed() {
           }
         });
         setitem(items);
-        setFound_item(Found_items)
+        setFound_item(Found_items);
       })
       .catch((err) => {
         console.log("Error :", err);
@@ -145,7 +164,8 @@ export default function Feed() {
     <div>
       <div>
         <Navbar />
-        {/* <h1 style={{ color: "white" }}>Welcome !</h1> */}
+
+        <h2 style={{ color: "white" }}>Welcome {user_info.firstname} !</h2>
       </div>
       <div>
         <Container fluid>
@@ -160,7 +180,9 @@ export default function Feed() {
               <h2 style={{ color: "white" }}>Found items :</h2>
               <Row>{Found_item}</Row>
             </div>
-          ) : ''}
+          ) : (
+            ""
+          )}
         </Container>
       </div>
     </div>

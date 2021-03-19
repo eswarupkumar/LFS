@@ -22,7 +22,7 @@ body{
     text-transform: uppercase;
     font-weight: 500;
 }
-.Box-1 input[type = "text"],.Box-1 input[ type = "Password"]{
+.Box-1 input[type = "text"],.Box-1 input[ type = "Password"],.Box-1 input[ type = "number"]{
     border: 0;
     background: none;
     display: block;

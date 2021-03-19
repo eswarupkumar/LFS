@@ -64,6 +64,7 @@ app.use(passport.session())
 mongoose.connect('mongodb+srv://swarupkumar:eashok410@cluster0.6kk18.mongodb.net/swarupkumar?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology:true,
+    useFindAndModify:false,
     useCreateIndex:true
 })
 

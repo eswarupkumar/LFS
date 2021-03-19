@@ -5,11 +5,10 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import { Button, Modal, Form } from "react-bootstrap";
 import Lost_item from "./Lost_item";
-import Found_item from "./Found_item";
 // import Login from './Login'
-function Navbar(props) {
+function Navbar() {
   const token = window.localStorage.getItem("token");
-  console.log(props)
+  // console.log(props)
   // console.log("Status :", LOGGED_IN)
   const signout = () => {
     // constraint.LOGGED_IN = false;

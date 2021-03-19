@@ -133,6 +133,7 @@ router.post('/signup',checkField,checkUsername,checkPassword,async (req,res)=>{
     var firstname=req.body.firstname
     var lastname=req.body.lastname
     var email=req.body.email
+    var number=req.body.number
     var password=req.body.password
     // password=bcryptjs.hashSync(password,10) //encrypting the password
     // var newSignup=new Signup({
@@ -159,6 +160,7 @@ router.post('/signup',checkField,checkUsername,checkPassword,async (req,res)=>{
             firstname:firstname,
             lastname:lastname,
             email:email,
+            number:number,
             password:password
         })
         // sendToken(newSignup,201,req,res)
