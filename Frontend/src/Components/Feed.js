@@ -1,22 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { NEW_USER, setConstraint, setUser } from "../constraints";
+import {  setConstraint } from "../constraints";
 import Navbar from "../Components/Navbar";
 import Axios from "axios";
 import {
   Card,
   Col,
   Container,
-  ListGroup,
-  ListGroupItem,
   Row,
 } from "react-bootstrap";
 
 export default function Feed() {
   // console.log("Status :", LOGGED_IN)
+  // const [user_info,setuser_info]=useState(localStorage.getItem("user"))
+  // const [user_info,setuser_info]=useState(localStorage.getItem('user'))
+  const [user_info,setuser_info]=useState(JSON.parse(localStorage.getItem('user')))
+  // const [user_info,setuser_info]=useState('')
+  console.log(user_info)
+
   const location = useLocation();
-  const user_info=location.user
-  console.log("User info is :", location.user);
+  // useEffect(()=>{
+  //   if(location.user==null){
+  //     console.log("if statement",user_info)
+  //     // location.user=''
+  //   }
+  //   else{
+  //     // console.log("Else",user_info)
+  //     console.log(location.user)
+  //     setuser_info(location.user)
+  //     console.log(user_info)
+  //     // console.log("Else statement",user_info)
+  //   }
+  // },[])
+  // useEffect(()=>{
+  //   console.log(location.user)
+  //   localStorage.setItem('user',JSON.stringify(location.user))
+  //   setuser_info((localStorage.getItem('user')))
+  // },[])
+  // console.log("User info is :", location.user);
   setConstraint(true);
   // var user_info
   // if(NEW_USER===false){
@@ -72,10 +93,10 @@ export default function Feed() {
 
           if (item.type === "Lost") {
             let user = false;
-            if (item.createdBy === location.user._id) {
+            if (item.createdBy === user_info._id) {
               user = true;
             }
-            console.log(item.name + " " + item.type);
+            console.log("Lost item "+user+item.name)
             items.push(
               <a
                 href={`/${item.name}?cid=${item._id}&type=${item.type}/${user}`}
@@ -112,13 +133,14 @@ export default function Feed() {
               </a>
             );
           } else {
-            var user = false;
-            if (item.createdBy === location.user._id) {
-              user=true
+            var user1 = false;
+            if (item.createdBy === user_info._id) {
+              user1=true
             }
-            console.log(item.name + " " + item.type);
+            console.log("Lost item "+user1+item.name)
+
             Found_items.push(
-              <a href={`/${item.name}?cid=${item._id}&type=${item.type}/${user}`}>
+              <a href={`/${item.name}?cid=${item._id}&type=${item.type}/${user1}`}>
                 <Col style={{ marginTop: "2%" }} md={3}>
                   {/* <li key={item.name}>{item.name}</li>
                 <li key={item.description}>{item.description}</li> */}
@@ -165,11 +187,11 @@ export default function Feed() {
       <div>
         <Navbar />
 
-        <h2 style={{ color: "white" }}>Welcome {user_info.firstname} !</h2>
+        <h2 >Welcome {user_info.firstname} !</h2>
       </div>
       <div>
         <Container fluid>
-          <h2 style={{ color: "white" }}>Lost items :</h2>
+          <h2>Lost items :</h2>
           <Row>{item}</Row>
         </Container>
       </div>
@@ -177,7 +199,7 @@ export default function Feed() {
         <Container fluid>
           {Found_item ? (
             <div>
-              <h2 style={{ color: "white" }}>Found items :</h2>
+              <h2>Found items :</h2>
               <Row>{Found_item}</Row>
             </div>
           ) : (

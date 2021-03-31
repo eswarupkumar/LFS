@@ -2,9 +2,8 @@ import React from "react";
 import {LOGGED_IN, setConstraint} from "../constraints";
 import "../css/Navbar.css";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.css";
-import { Button, Modal, Form } from "react-bootstrap";
-import Lost_item from "./Lost_item";
+// import "bootstrap/dist/css/bootstrap.css";
+import Lost_item from "./Lost_item";  
 // import Login from './Login'
 function Navbar() {
   const token = window.localStorage.getItem("token");

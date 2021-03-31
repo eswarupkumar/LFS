@@ -54,7 +54,7 @@ function ItemPage(props) {
         setCreatedby(data.createdBy)
 
         temp.push(
-          <div style={{ color: "white" }}>
+          <div>
             <h2>Item name : {data.name}</h2>
             <h2>Item description : {data.description}</h2>
             <h2>Item type : {data.type}</h2>
@@ -243,7 +243,7 @@ function ItemPage(props) {
           </Modal.Footer>
         </Modal>
       </div>
-      ;
+      
     </>
   );
 }

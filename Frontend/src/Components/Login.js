@@ -30,6 +30,7 @@ function Login() {
                 setuser_info(response.data.user)
                 localStorage.setItem("token",response.data.jwt_token)
                 // console.log(response.data.user)
+                localStorage.setItem("user",JSON.stringify(response.data.user))
                 history.push({pathname:'/feed',user:response.data.user})
             }
             else{
