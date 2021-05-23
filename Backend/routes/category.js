@@ -1,53 +1,77 @@
 const { postitem } = require("../models/category");
-const { requestitem } = require("../models/category");
+const messageschema = require("../models/messages");
+
+// const { requestitem } = require("../models/category");
 const { requireSignin, userMiddleware } = require("../middleware");
 const express = require("express");
 const router = express.Router();
-// const multer=require('multer')
-// const shortid=require('shortid')
-// const push=multer({dest:'uploads/'})
+const multer=require('multer')
+const shortid=require('shortid')
+// const upload=multer({dest:'uploads/'})  
 const path = require("path");
 const SignUp = require("../models/signup");
 const category = require("../models/category");
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null,'./uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, shortid.generate()+'-'+file.originalname + '-' + Date.now())
+    }
+})
 
-// var storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, path.join(path.dirname(__dirname),'uploads'))
-//     },
-//     filename: function (req, file, cb) {
-//       cb(null, shortid.generate()+'-'+file.originalname + '-' + Date.now())
-//     }
-// })
 
-// var upload = multer({ storage })
-// push.single("itemPic"),
-router.post("/postitem", requireSignin, userMiddleware, async (req, res) => {
+var upload = multer({ storage })
+
+router.post("/postitem", requireSignin, userMiddleware, upload.array('itemPictures') , async (req, res) => {
   // console.log(req)
   console.log("Hitted the POST successfully ");
   try {
     console.log("try");
-
+    const {name,description,question,type}=req.body
+    console.log(req.files)
+    // console.log(createdBy)
+    var itemPictures=[]
+    if(req.files.length>0){
+      itemPictures= req.files.map(file=>{
+        return {img : file.filename}
+      })
+    }
     // console.log(req.body.name)
     // console.log(req.body.description)
     // console.log(req.body.itemPictures)
     // console.log(req.user._id)
-  
+    // console.log(req.files)
+    // console.log(req.body)
+    // upload.single('itemImage')
+    // upload.single(req.files)
+    //Saving data to db
+
     const newPost = await postitem.create({
-      name: req.body.name,
-      description: req.body.description,
-      type:req.body.type,
-      createdBy: req.user._id,
+      name:name,
+      description:description,
+      question:question,
+      type:type,
+      createdBy:req.user._id,
+      itemPictures:itemPictures
     });
+    newPost.save(((error,item)=>{
+      if(error) return res.status(400).json({error})
+      if(item) return res.status(201).json({item})
+    }))
+    // upload.single('image')
+
     // if(req.body.itemPictures!=''){
     //   console.log(":Executed:")
     //   newPost.insert({itemPictures:req.body.itemPictures})
     // }
     
     // sendToken(newSignup,201,req,res)
-    console.log(newPost);
-    res.status(200).json({
-      message: "Item Posted",
-    });
+    // console.log(newPost);
+    // res.status(200).json({
+    //   body:req.body,
+    //   file:req.files
+    // });
     // res.send("Done")
   } catch (err) {
         res.status(401).json({
@@ -55,25 +79,25 @@ router.post("/postitem", requireSignin, userMiddleware, async (req, res) => {
         });
     }
 });
-router.post("/founditem", requireSignin, userMiddleware, async (req, res) => {
-  try {
-    console.log(req.body.name,req.body.description,req.body.itemPictures,req.user._id)
-    const newRequest = await requestitem.create({
-      name: req.body.name,
-      description: req.body.description,
-      itemPictures:req.body.itemPictures,
-      createdBy: req.user._id,
-    });
-    // sendToken(newSignup,201,req,res)
-    console.log(newRequest);
-    res.status(200).json({
-      message: "Request Done",
-    });
-    // res.send("Done")
-  } catch (err) {
-    res.status(401).json(err.message);
-  }
-});
+// router.post("/founditem", requireSignin, userMiddleware, async (req, res) => {
+//   try {
+//     console.log(req.body.name,req.body.description,req.body.itemPictures,req.user._id)
+//     const newRequest = await requestitem.create({
+//       name: req.body.name,
+//       description: req.body.description,
+//       itemPictures:req.body.itemPictures,
+//       createdBy: req.user._id,
+//     });
+//     // sendToken(newSignup,201,req,res)
+//     console.log(newRequest);
+//     res.status(200).json({
+//       message: "Request Done",
+//     });
+//     // res.send("Done")
+//   } catch (err) {
+//     res.status(401).json(err.message);
+//   }
+// });
 router.get("/getitem",(req, res) => {
   postitem.find({}).exec((err, postitems) => {
     if (err) return res.status(400).json({ err });
@@ -109,10 +133,15 @@ router.get('/item/:id',(req,res)=>{
   postitem.find({_id:id})
   .exec((err,item)=>{
     if(err) return res.status(400).json({'Error':err})
-
     // console.log(item)
-    res.status(200).json({
-      'Item':item
+    messageschema.find({itemId:item[0]._id}).exec((err,answers)=>{
+      if(err) return res.status(400).json({'Error':err})
+
+      // console.log(answers)
+      res.status(200).json({
+        'Item':item,
+        'Answers':answers
+      })
     })
   })
 })
@@ -161,6 +190,84 @@ router.get('/getnumber/:id',(req,res)=>{
   })
 })
 
+router.get('/getquestion/:id',(req,res)=>{
+  const {id}=req.params
+  console.log("Id is :",id)
+  postitem.find({_id:id})
+  .exec((err,item)=>{
+    if(err) return res.status(400).json({'Error':err})
+
+    // console.log(item)
+    // console.log(item[0].createdBy)
+    const createdBy=item[0].createdBy
+    SignUp.find({_id:createdBy}).exec((err,user)=>{
+      res.status(200).json({
+        'Question':user[0].number
+      })
+    })
+  })
+})
+
+router.post('/submitAnswer',async (req,res)=>{
+  console.log(req.body)
+  const {itemId,question,answer,givenBy,belongsTo}=req.body
+  // postitem.find({_id:itemId}).exec(((err,user)=>{
+  //   console.log(user[0].createdBy)
+  //   belongsTo=user[0].createdBy
+  // }))
+
+  const newmessage=await messageschema.create({
+    itemId:itemId,
+    belongsTo:belongsTo,
+    question:question,
+    answer:answer,
+    givenBy:givenBy
+  })
+  newmessage.save(((error,item)=>{
+    if(error) return res.status(400).json({error})
+    if(item) return res.status(201).json({item})
+  }))
+})
+
+router.get('/myresponses/:id',(req,res)=>{
+  const {id}=req.params
+  console.log("Used Id is :",id)
+  messageschema.find({givenBy:id})
+  .exec((err,item)=>{
+    if(err) return res.status(400).json({'Error':err})
+
+    console.log(item)
+    res.status(200).json({
+      item:item
+    })
+  })
+})
+
+router.get('/mylistings/:id',(req,res)=>{
+  const {id}=req.params
+  // console.log("Used Id is :",id)
+  postitem.find({createdBy:id})
+  .exec((err,item)=>{
+    if(err) return res.status(400).json({'Error':err})
+
+    // console.log(item)
+    res.status(200).json({
+      item:item
+    })
+  })
+})
+
+router.post('/confirmResponse/:id',(req,res)=>{
+  const {id}=req.params
+  // console.log("Used Id is :",id)
+  console.log(id)
+  console.log(req.body)
+  messageschema.updateOne({_id:id},{$set: {response:req.body.response}},{upsert:false},(err,updatedMessage)=>{
+    if(err) return res.status(400).json({'msg':err})
+
+    res.status(200).json({'msg':'Updated'})
+  })
+})
 module.exports = router;
 
 

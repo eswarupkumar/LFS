@@ -1,4 +1,5 @@
 var express = require('express')
+// const fileUpload=require('express-fileupload')
 const app = express()
 // var bodyParser = require('body-parser')
 // const morgan =require('morgan')
@@ -10,17 +11,20 @@ const mongoose =require('mongoose')
 const routes = require('./routes/auth')
 const category = require('./routes/category')
 const passport = require('passport');
+var path = require('path');
 // const session = require('express-session');
 // const cookieSession = require('cookie-session')
 require('./config/passport')(passport)
 
+// app.use('/public',express.static('./uploads'))
 app.enable("trust proxy")
-
+// app.use(fileUpload())
 // app.use(cors())//avoid inter port communication error
 app.use(cors({
     origin:"http://localhost:3000",
     credentials: true
 }));
+app.use(express.static(path.join(__dirname, 'uploads')));
 app.use(cookie_parser())
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json())

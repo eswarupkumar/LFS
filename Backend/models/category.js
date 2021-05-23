@@ -20,6 +20,14 @@ const CategorySchema= new Schema({
     itemPictures: [
         { img: { type: String, required:false } }
     ],
+    question:{
+        type:String,
+        required:true
+    },
+    status:{
+        type: Boolean,
+        default: true
+    },
     createdBy:{
         type:mongoose.Schema.Types.ObjectId, ref:"SignUpSchema",
         required:true
@@ -27,8 +35,7 @@ const CategorySchema= new Schema({
 },{timestamps:true})
 
 const postitem=mongoose.model('PostItem',CategorySchema)
-const requestitem=mongoose.model('RequestItem',CategorySchema)
+// const requestitem=mongoose.model('RequestItem',CategorySchema)
 module.exports = {
-    postitem: postitem,
-    requestitem: requestitem
+    postitem: postitem
 }

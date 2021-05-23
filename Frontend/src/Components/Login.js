@@ -36,7 +36,7 @@ function Login() {
             else{
                 setinfo(response.data)
             }
-            console.log("Response :",response)
+            // console.log("Response :",response)
         })
         .catch(error => {
             console.log(error)
@@ -73,10 +73,10 @@ function Login() {
             <>
                 <Navbar/>
                 <div>
-                <form className="Box-1" >
+                <form className="Box-1 login" >
                     <h1>Log in</h1>
                     <p style={{color:'white'}}>{info}</p>
-                    <input type="text" name="email" id='email' placeholder="Email id" required  />
+                    <input type="email" name="email" id='email' placeholder="Email id" required  />
                     <input type="password" placeholder="Password" id="password" name="password" required  />
                     {/* <input type="submit" placeholder="Submit"></input> */}
                     <button type="button" className='submit' onClick={login}>Submit</button>

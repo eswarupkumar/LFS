@@ -1,13 +1,14 @@
 import React from "react";
 import Navbar from "./Navbar";
 import "../css/landing.css";
-import image from "../img/undraw_lost_bqr2.svg";
-import '../Components/Lost_item'
+// import image from "../img/undraw_lost_bqr2.svg";
+import image from "../img/lost.svg";
 export default function Home() {
 
   const postitem=()=>{
     if(localStorage.getItem('user')!==null){
       console.log("User already logged in !")
+      
     }
     else{
       console.log("Not logged in")
@@ -29,24 +30,24 @@ export default function Home() {
             <div className="image">
               <img
                 src={image}
-                style={{ width: "450px", height: "450px" }}
+                style={{ width: "500px", height: "500px" }}
                 alt=""
               />
             </div>
           </div>
         </div>
-        <div className="post-item">
+        {/* <div className="post-item">
           <button class="button" onClick={postitem}>Post Item</button>
-        </div>        
+        </div>         */}
       </div>
-      <div className="About">
+      {/* <div className="About">
         <div>
           <h1>About the project</h1>
           <p>
             
           </p>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

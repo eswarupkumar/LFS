@@ -7,15 +7,15 @@ body{
     /* background-image:  url(img/background.jpg); */
 }
 .Box-1{
-    width: 300px;
-    padding: 40px;
+    width: 500px;
+    padding: 30px;
     position: absolute;
-    top: 50%;
+    top: 56%;
     left: 50%;
     transform: translate(-50%,-50%);
     background: #37474F;
     text-align: center;
-    opacity: 0.6;
+    opacity: 1;
     border-radius: 3%;
 }
 .Box-1 h1{
@@ -23,7 +23,7 @@ body{
     text-transform: uppercase;
     font-weight: 500;
 }
-.Box-1 input[type = "text"],.Box-1 input[ type = "Password"],.Box-1 input[ type = "number"]{
+.Box-1 input[type = "email"],.Box-1 input[ type = "Password"],.Box-1 input[ type = "number"],.Box-1 input[ type = "text"]{
     border: 0;
     background: none;
     display: block;
@@ -38,7 +38,7 @@ body{
     transition: 0.25s;
 }
 
-.Box-1 input[type = "text"]:focus,.Box-1 input[ type = "Password"]:focus{
+.Box-1 input[type = "email"]:focus,.Box-1 input[ type = "Password"]:focus,.Box-1 input[ type = "text"]:focus{
     width: 280px;
     border-color: #8BC34A;
 }
@@ -46,7 +46,7 @@ body{
     border: 0;
     background: none;
     display: block;
-    margin: 20px auto;
+    margin: 10px auto;
     text-align: center;
     border: 2px solid #8BC34A;
     padding: 14px 40px;
@@ -58,4 +58,10 @@ body{
 }
 .submit:hover{
     background: #8BC34A;
+}
+.row1{
+    display: flex;
+}
+.signup{
+    display: flex;
 }

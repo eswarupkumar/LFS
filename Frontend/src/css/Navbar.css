@@ -23,14 +23,21 @@
     font-size: 18px;
     cursor: pointer;
 }
+.postsignin{
+    display: flex;
+}
+.postsignin>ul{
+    margin: 6px 10px 0px 10px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    width: 260px;
+    justify-content: space-around;
+}
 .signin>ul:hover{
     color: black;
 }
-a:link{
-    color: inherit;
-    text-decoration: none;
+#test{
+    text-decoration:'none';
+    color: white;
 }
-a:visited {
-    text-decoration: none;
-  }
-  

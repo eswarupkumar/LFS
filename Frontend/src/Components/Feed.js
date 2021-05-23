@@ -16,9 +16,9 @@ export default function Feed() {
   // const [user_info,setuser_info]=useState(localStorage.getItem('user'))
   const [user_info,setuser_info]=useState(JSON.parse(localStorage.getItem('user')))
   // const [user_info,setuser_info]=useState('')
-  console.log(user_info)
+  // console.log(user_info)
 
-  const location = useLocation();
+  // const location = useLocation();
   // useEffect(()=>{
   //   if(location.user==null){
   //     console.log("if statement",user_info)
@@ -90,13 +90,13 @@ export default function Feed() {
           //   console.log('The author is %s', story);
           //   // prints "The author is Ian Fleming"
           // });
-
+          // console.log(item.itemPictures[0].img)
           if (item.type === "Lost") {
             let user = false;
             if (item.createdBy === user_info._id) {
               user = true;
             }
-            console.log("Lost item "+user+item.name)
+            // console.log("Lost item "+user+item.name)
             items.push(
               <a
                 href={`/${item.name}?cid=${item._id}&type=${item.type}/${user}`}
@@ -104,8 +104,8 @@ export default function Feed() {
                 <Col key={item.name} style={{ marginTop: "2%" }} md={3}>
                   {/* <li key={item.name}>{item.name}</li>
                 <li key={item.description}>{item.description}</li> */}
-                  <Card style={{ width: "17rem" }}>
-                    {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
+                  <Card style={{ width: "17rem",border:"2px solid black" }}>
+                    <Card.Img variant="top" src={`http://localhost:5000/${item.itemPictures[0].img}`} />
                     <Card.Body>
                       <Card.Title>Item :{item.name}</Card.Title>
                       {/* <Card.Text>Type :{item.type}</Card.Text> */}
@@ -137,15 +137,15 @@ export default function Feed() {
             if (item.createdBy === user_info._id) {
               user1=true
             }
-            console.log("Lost item "+user1+item.name)
+            // console.log("Lost item "+user1+item.name)
 
             Found_items.push(
               <a href={`/${item.name}?cid=${item._id}&type=${item.type}/${user1}`}>
                 <Col style={{ marginTop: "2%" }} md={3}>
                   {/* <li key={item.name}>{item.name}</li>
                 <li key={item.description}>{item.description}</li> */}
-                  <Card key={item.name} style={{ width: "17rem" }}>
-                    {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
+                  <Card key={item.name} style={{ width: "17rem",border:"2px solid black" }}>
+                    <Card.Img variant="top" src={`http://localhost:5000/${item.itemPictures[0].img}`} />
                     <Card.Body>
                       <Card.Title>Item :{item.name}</Card.Title>
                       {/* <Card.Text>Type :{item.type}</Card.Text> */}

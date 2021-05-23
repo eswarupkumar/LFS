@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import "../css/newSignup.css";
-import { Form } from "react-bootstrap";
 import axios from "axios";
 import Navbar from "../Components/Navbar";
+
 export default class Signup extends Component {
   constructor() {
     super();
@@ -30,7 +29,7 @@ export default class Signup extends Component {
   // }
   submit = () => {
     this.setState({
-      info:'',
+      info: "",
     });
     console.log("Inside Submit");
     console.log(this.state);
@@ -80,6 +79,7 @@ export default class Signup extends Component {
     return (
       <>
         <Navbar />
+
         <div>
           <form className="Box-1">
             <h1 className="name">Sign up</h1>
@@ -104,45 +104,49 @@ export default class Signup extends Component {
                 }}
               />
             </div>
-            <input
-              type="text"
-              id="email"
-              placeholder="Email"
-              required
-              onChange={(e) => {
-                this.setState({ username: e.target.value });
-              }}
-            />
-            <input
-              type="number"
-              id="number"
-              placeholder="Phone Number"
-              required
-              onChange={(e) => {
-                this.setState({ number: e.target.value });
-              }}
-            />
+            <div className="row1">
+              <input
+                type="email"
+                id="email"
+                placeholder="Email"
+                required
+                onChange={(e) => {
+                  this.setState({ username: e.target.value });
+                }}
+              />
+              <input
+                type="number"
+                id="number"
+                placeholder="Phone Number"
+                required
+                onChange={(e) => {
+                  this.setState({ number: e.target.value });
+                }}
+              />
+            </div>
             {/* <input type="text" name="username" id='username' placeholder="User Name" required onChange={(e)=>{this.setState({username:e.target.value})}} /> */}
-            <input
-              type="password"
-              placeholder="Password"
-              id="password"
-              name="password"
-              required
-              onChange={(e) => {
-                this.setState({ password: e.target.value });
-              }}
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              id="cpassword"
-              name="cpassword"
-              required
-              onChange={(e) => {
-                this.setState({ cpassword: e.target.value });
-              }}
-            />
+            <div className="row1">
+              <input
+                type="password"
+                placeholder="Password"
+                id="password"
+                name="password"
+                required
+                onChange={(e) => {
+                  this.setState({ password: e.target.value });
+                }}
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                id="cpassword"
+                name="cpassword"
+                required
+                onChange={(e) => {
+                  this.setState({ cpassword: e.target.value });
+                }}
+              />
+            </div>
             <button type="button" className="submit" onClick={this.submit}>
               Submit
             </button>

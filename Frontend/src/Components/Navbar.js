@@ -2,7 +2,6 @@ import React from "react";
 import {LOGGED_IN, setConstraint} from "../constraints";
 import "../css/Navbar.css";
 import axios from "axios";
-// import "bootstrap/dist/css/bootstrap.css";
 import Lost_item from "./Lost_item";  
 // import Login from './Login'
 function Navbar() {
@@ -36,26 +35,32 @@ function Navbar() {
           </div>
         </a>
         <div
-          style={LOGGED_IN ? { display: "none" } : {}}
+          style={token ? { display: "none" } : {}}
           id="login"
           className="signin"
         >
           <ul>
-            <a href="/sign-up">Sign-up</a>
+            <a id='a' style={{textDecoration:"none",color:"white"}} href="/sign-up">Sign-up</a>
           </ul>
           <ul>
-            <a href="/log-in">Log-in</a>
+            <a id="a" style={{textDecoration:"none",color:"white"}} href="/log-in">Log-in</a>
           </ul>
         </div>
         <div
-          style={LOGGED_IN ? {} : { display: "none" }}
-          className="signin"
+          style={token ? {} : { display: "none" }}
+          className="postsignin"
         >
           <Lost_item />
           {/* <Found_item /> */}
           <ul>
             {/* {props.name} */}
-            <a onClick={signout} href="/log-in">
+            <a  style={{textDecoration:"none",color:"white"}} href="/responses">
+              Responses
+            </a>
+            <a  style={{textDecoration:"none",color:"white"}} href="/mylistings">
+              My Listings
+            </a>
+            <a  style={{textDecoration:"none",color:"white"}} onClick={signout} href="/log-in">
               Sign-out
             </a>
           </ul>
