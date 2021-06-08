@@ -4,9 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "client": "cd ../ && cd Frontend && npm start",
-    "start": "concurrently -n 'server,client' -c 'red,blue' \"nodemon backend\" \"npm run client\""
+    "start": "node ./server.js"
   },
   "author": "",
   "license": "ISC",
