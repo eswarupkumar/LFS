@@ -1,7 +1,5 @@
 var express = require('express')
-// const fileUpload=require('express-fileupload')
 const app = express()
-const { requireSignin } = require("./middleware");
 // var bodyParser = require('body-parser')
 // const morgan =require('morgan')
 require("dotenv").config({path: '../.env'});
@@ -66,7 +64,7 @@ app.use(passport.session())
 //     useCreateIndex:true
 // })
 
-mongoose.connect('mongodb+srv://swarupkumar:eashok410@cluster0.6kk18.mongodb.net/swarupkumar?retryWrites=true&w=majority',{
+mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.6kk18.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority`,{
     useNewUrlParser: true,
     useUnifiedTopology:true,
     useFindAndModify:false,
