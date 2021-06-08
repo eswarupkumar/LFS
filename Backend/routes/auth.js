@@ -5,7 +5,7 @@ const nodemailer=require("nodemailer")
 const mailgun =require("nodemailer-mailgun-transport")
 const router = express.Router()
 const jwt=require('jsonwebtoken')
-const httpProxy = require('http-proxy');
+// const httpProxy = require('http-proxy');
 const {requireSignin}=require('../middleware')
 // const proxy = httpProxy.createServer({});
 // const passport=require('passport')
@@ -15,7 +15,7 @@ const { token } = require('morgan');
 // const { db } = require("../models/signup");
 // const { Router } = require('express');
 // const { token } = require('morgan');
-// require("dotenv").config();
+require("dotenv").config({path: '../../.env'});
 const JWT_SECRET=process.env.JWT_SECRET
 const JWT_EXPIRES=process.env.JWT_EXPIRES
 const NODE_ENV=process.env.NODE_ENV
@@ -276,8 +276,8 @@ router.post('/sendmessage',(req,res)=>{
     const {name,email,message}=req.body
     const auth={
         auth:{
-            api_key: '841f71597041d62a45961bbe6ab51ea4-fa6e84b7-e18b5c72',
-            domain: 'sandboxe5469e805b054ce2917989636a11ca05.mailgun.org'
+            api_key: `${process.env.MAIL_GUN_API_KEY}`,
+            domain: `${process.env.MAIL_GUN_DOMAIN}`
         }
     }
 

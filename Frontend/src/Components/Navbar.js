@@ -4,8 +4,8 @@ import "../css/Navbar.css";
 import axios from "axios";
 import Lost_item from "./Lost_item";
 import { ToastProvider } from 'react-toast-notifications';
-import profile_icon from "../img/profile-icon.png";
-import { Dropdown } from "react-bootstrap";
+// import profile_icon from "../img/profile-icon.png";
+// import { Dropdown } from "react-bootstrap";
 // import Login from './Login'
 function Navbar() {
   const token = window.localStorage.getItem("token");
