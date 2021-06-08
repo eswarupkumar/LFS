@@ -1,6 +1,7 @@
 var express = require('express')
 // const fileUpload=require('express-fileupload')
 const app = express()
+const { requireSignin } = require("./middleware");
 // var bodyParser = require('body-parser')
 // const morgan =require('morgan')
 require("dotenv").config({path: '../.env'});
@@ -14,7 +15,7 @@ const passport = require('passport');
 var path = require('path');
 // const session = require('express-session');
 // const cookieSession = require('cookie-session')
-require('./config/passport')(passport)
+// require('./config/passport')(passport)
 
 // app.use('/public',express.static('./uploads'))
 app.enable("trust proxy")

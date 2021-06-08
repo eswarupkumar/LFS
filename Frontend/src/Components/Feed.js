@@ -1,20 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import {  setConstraint } from "../constraints";
+import { setConstraint } from "../constraints";
 import Navbar from "../Components/Navbar";
+import "../css/feed.css";
+import "../css/item_card.css";
 import Axios from "axios";
-import {
-  Card,
-  Col,
-  Container,
-  Row,
-} from "react-bootstrap";
+import { Card, Col, Container, Row,Alert } from "react-bootstrap";
 
 export default function Feed() {
   // console.log("Status :", LOGGED_IN)
   // const [user_info,setuser_info]=useState(localStorage.getItem("user"))
   // const [user_info,setuser_info]=useState(localStorage.getItem('user'))
-  const [user_info,setuser_info]=useState(JSON.parse(localStorage.getItem('user')))
+  const [user_info, setuser_info] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
+  const ReadMore = ({ children }) => {
+    const text = children;
+    const [isReadMore, setIsReadMore] = useState(true);
+    const toggleReadMore = () => {
+      setIsReadMore(!isReadMore);
+    };
+    return (
+      <p style={{ fontSize: "1rem" }} className="text">
+        {isReadMore ? text.slice(0, 15) : text}
+        <span onClick={toggleReadMore} className="read-or-hide">
+          {isReadMore ? "...." : " show less"}
+        </span>
+      </p>
+    );
+  };
   // const [user_info,setuser_info]=useState('')
   // console.log(user_info)
 
@@ -61,29 +75,18 @@ export default function Feed() {
         let Found_items = [];
         data.reverse().map((item) => {
           let created_date = new Date(item.createdAt);
-          // console.log(date.toString());
-          var months = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ];
-          var year = created_date.getFullYear();
-          var month = months[created_date.getMonth()];
-          var date = created_date.getDate();
-          var hour = created_date.getHours();
-          var min = created_date.getMinutes();
-          // var sec = created_date.getSeconds();
-          var time = date + "," + month + " " + year + " " + hour + ":" + min;
-
+          // console.log(created_date);
+          // console.log(created_date.getDate()+"/"+created_date.getMonth()+"/"+created_date.getFullYear()+" "+created_date.getHours()+":"+created_date.getMinutes());
+          let createdAt =
+            created_date.getDate() +
+            "/" +
+            created_date.getMonth() +
+            "/" +
+            created_date.getFullYear() +
+            " " +
+            created_date.getHours() +
+            ":" +
+            created_date.getMinutes();
           // category.postitem.findOne({createdBy: item.createdBy}).populate('name')
           // .exec(function (err, story) {
           //   if (err) return err
@@ -91,12 +94,13 @@ export default function Feed() {
           //   // prints "The author is Ian Fleming"
           // });
           // console.log(item.itemPictures[0].img)
-          if (item.type === "Lost") {
+          if (item.type === "Lost" && item.status===true) {
             let user = false;
             if (item.createdBy === user_info._id) {
               user = true;
             }
             // console.log("Lost item "+user+item.name)
+            // console.log(`http://localhost:5000/${item.itemPictures[0].img}`)
             items.push(
               <a
                 href={`/${item.name}?cid=${item._id}&type=${item.type}/${user}`}
@@ -104,17 +108,42 @@ export default function Feed() {
                 <Col key={item.name} style={{ marginTop: "2%" }} md={3}>
                   {/* <li key={item.name}>{item.name}</li>
                 <li key={item.description}>{item.description}</li> */}
-                  <Card style={{ width: "17rem",border:"2px solid black" }}>
-                    <Card.Img variant="top" src={`http://localhost:5000/${item.itemPictures[0].img}`} />
-                    <Card.Body>
-                      <Card.Title>Item :{item.name}</Card.Title>
+                  <Card bsPrefix="item-card">
+                    <Card.Img
+                      variant="top"
+                      src={`http://localhost:5000/${item.itemPictures[0].img}`}
+                    />
+                    <Card.Body bsPrefix="card-body">
+                      <Card.Title
+                        style={{
+                          fontFamily: "'Noto Sans JP', sans-serif",
+                          fontWeight: "1.35rem",
+                        }}
+                      >
+                        Item :{item.name}
+                      </Card.Title>
                       {/* <Card.Text>Type :{item.type}</Card.Text> */}
                       {item.description ? (
-                        <Card.Text>Description :{item.description}</Card.Text>
+                        <Card.Text
+                          style={{
+                            fontFamily: "'Noto Sans JP', sans-serif",
+                            fontSize: "1rem",
+                          }}
+                        >
+                          {" "}
+                          Description :<ReadMore>{item.description}</ReadMore>
+                        </Card.Text>
                       ) : (
                         ""
                       )}
-                      <Card.Text>Created at : {time}</Card.Text>
+                      <Card.Text
+                        style={{
+                          fontFamily: "'Noto Sans JP', sans-serif",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Created at : {createdAt}
+                      </Card.Text>
                       {/* <Card.Text>
                       Created by :{item.createdBy}
                     </Card.Text> */}
@@ -135,26 +164,53 @@ export default function Feed() {
           } else {
             var user1 = false;
             if (item.createdBy === user_info._id) {
-              user1=true
+              user1 = true;
             }
             // console.log("Lost item "+user1+item.name)
 
             Found_items.push(
-              <a href={`/${item.name}?cid=${item._id}&type=${item.type}/${user1}`}>
+              <a
+                href={`/${item.name}?cid=${item._id}&type=${item.type}/${user1}`}
+              >
                 <Col style={{ marginTop: "2%" }} md={3}>
                   {/* <li key={item.name}>{item.name}</li>
                 <li key={item.description}>{item.description}</li> */}
-                  <Card key={item.name} style={{ width: "17rem",border:"2px solid black" }}>
-                    <Card.Img variant="top" src={`http://localhost:5000/${item.itemPictures[0].img}`} />
-                    <Card.Body>
-                      <Card.Title>Item :{item.name}</Card.Title>
+                  <Card bsPrefix="item-card" key={item.name}>
+                    <Card.Img
+                      variant="top"
+                      src={`http://localhost:5000/${item.itemPictures[0].img}`}
+                    />
+                    <Card.Body bsPrefix="card-body">
+                      <Card.Title
+                        style={{
+                          fontFamily: "'Noto Sans JP', sans-serif",
+                          fontWeight: "1.35rem",
+                        }}
+                      >
+                        Item :{item.name}
+                      </Card.Title>
                       {/* <Card.Text>Type :{item.type}</Card.Text> */}
                       {item.description ? (
-                        <Card.Text>Description :{item.description}</Card.Text>
+                        <Card.Text
+                          style={{
+                            fontFamily: "'Noto Sans JP', sans-serif",
+                            fontSize: "1rem",
+                          }}
+                        >
+                          {" "}
+                          Description :<ReadMore>{item.description}</ReadMore>
+                        </Card.Text>
                       ) : (
                         ""
                       )}
-                      <Card.Text>Created at : {time}</Card.Text>
+                      <Card.Text
+                        style={{
+                          fontFamily: "'Noto Sans JP', sans-serif",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Created at : {createdAt}
+                      </Card.Text>
                       {/* <Card.Text>
                       Created by :{item.createdBy}
                     </Card.Text> */}
@@ -186,12 +242,19 @@ export default function Feed() {
     <div>
       <div>
         <Navbar />
-
-        <h2 >Welcome {user_info.firstname} !</h2>
+        <h2
+          style={{
+            fontFamily: "'Noto Sans JP', sans-serif",
+            marginLeft: "5px",
+          }}
+        >
+          Welcome {user_info.firstname} 👋!
+        </h2>
       </div>
       <div>
         <Container fluid>
-          <h2>Lost items :</h2>
+          <h2 style={{ textAlign: "center" }}>Lost items :</h2>
+          <div className="title-border"></div>
           <Row>{item}</Row>
         </Container>
       </div>
@@ -199,7 +262,8 @@ export default function Feed() {
         <Container fluid>
           {Found_item ? (
             <div>
-              <h2>Found items :</h2>
+              <h2 style={{ textAlign: "center" }}>Found items :</h2>
+              <div className="title-border"></div>
               <Row>{Found_item}</Row>
             </div>
           ) : (

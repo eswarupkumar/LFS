@@ -6,12 +6,14 @@ import Signup from './Components/Signup'
 import Login from './Components/Login'
 import Feed from './Components/Feed'
 import Response from './Components/Response'
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import NotFound from './Components/NotFound'
 import PrivateRoute from './Components/privateroute';
 import Home from './Components/Home';
 import ItemPage from './Components/ItemPage';
 // import Feed from './Components/Feed'
 import MyListings from './Components/MyListings'
+import { ToastProvider } from 'react-toast-notifications';
 window.OneSignal = window.OneSignal || [];
 const OneSignal = window.OneSignal;
 function App()
@@ -44,9 +46,12 @@ function App()
         <Route path='/sign-up' component={Signup} exact/>
         <Route path='/log-in' component={Login} />
         <PrivateRoute path='/feed' component={Feed}  />
-        <Route path='/mylistings' component={MyListings} exact />
+        <Route path='/mylistings'  component={MyListings} exact />
         <Route path='/responses' component={Response} exact />
-        <Route path='/:item' component={ItemPage} exact />
+        <ToastProvider autoDismiss={true} placement={"bottom-right"}>
+
+          <Route path='/:item'  component={ItemPage} exact />
+        </ToastProvider>
         {/* <Route path='*' component={NotFound}/> */}
       </Switch>
     </Router>

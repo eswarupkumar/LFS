@@ -1,6 +1,8 @@
 // const { request } = require("express");
 // const bcryptjs =require('bcryptjs')
 const express = require('express')
+const nodemailer=require("nodemailer")
+const mailgun =require("nodemailer-mailgun-transport")
 const router = express.Router()
 const jwt=require('jsonwebtoken')
 const httpProxy = require('http-proxy');
@@ -257,7 +259,9 @@ router.post('/login',checkFieldLogin,(req,res,next)=>{
     // })(req,res,next)
     // console.log('passport authenticate done')
 })
-
+router.post('/checktoken',requireSignin,(req,res)=>{
+    res.status(200).json({})
+})
 router.post('/signout',requireSignin, signout)
 router.post('/feed',requireSignin,(req,res)=>res.status(200).json({
     message:"Working fine"
@@ -267,5 +271,30 @@ router.post('/feed',requireSignin,(req,res)=>res.status(200).json({
 //     message:"Working fine"
 // }))
 
+router.post('/sendmessage',(req,res)=>{
+    console.log(req.body)
+    const {name,email,message}=req.body
+    const auth={
+        auth:{
+            api_key: '841f71597041d62a45961bbe6ab51ea4-fa6e84b7-e18b5c72',
+            domain: 'sandboxe5469e805b054ce2917989636a11ca05.mailgun.org'
+        }
+    }
+
+    const transporter = nodemailer.createTransport(mailgun(auth))
+
+    const mailOption={
+        from:email,
+        to:'eswarupkumar1111@gmail.com',
+        subject:`Review from ${name}`,
+        text:message
+    }
+
+    transporter.sendMail(mailOption,(err,data)=>{
+        if(err) return res.status(500).json(err)
+        console.log(data)
+        res.status(200).json(data)
+    })
+})
 
 module.exports = router;

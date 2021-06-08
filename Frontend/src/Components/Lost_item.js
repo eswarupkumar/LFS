@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
+import lodash from "lodash";
 import "bootstrap/dist/css/bootstrap.css";
+import { useToasts } from "react-toast-notifications";
 import { Button, Modal, Form } from "react-bootstrap";
 function Lost_item() {
   const [show, setShow] = useState(false);
-
+  const { addToast } = useToasts();
   const token = window.localStorage.getItem("token");
 
   const [itemname, setitemname] = useState("");
   const [description, setdescription] = useState("");
   const [itemquestion, setitemquestion] = useState("");
-  const [itemimage, setitemimage] = useState("");
+  const [itemimage, setitemimage] = useState([]);
   const [type, settype] = useState("");
-
+  const [alertshow, setalertShow] = useState(true);
 
   const handleShow = () => setShow(true);
   const handleClose = () => {
@@ -27,37 +29,61 @@ function Lost_item() {
     //   itemPictures: itemimage,
     // };
     // console.log(payload)
-    const info=new FormData()
-    info.append('name',itemname)
-    info.append('description',description)
-    info.append('question',itemquestion)
-    info.append('type',type)
-    info.append('itemPictures',itemimage,itemimage.name)
-    axios({
-      url: "http://localhost:5000/postitem",
-      method: "POST",
-      data: info,
-      headers: {
-        Authorization: token ? `Bearer ${token}` : "",
-      },
-      withCredentials: true,
-      credentials: "include",
-      onUploadProgress:ProgressEvent =>{
-        console.log('Upload progress: ' + Math.round(ProgressEvent.loaded / ProgressEvent.total *100)+'%')
-      }
-      // url: "http://localhost:5000/login"
-    })
-      .then((response) => console.log(response))
-      .then(() => {
-        setitemname("");
-        setdescription("");
-        settype("")
-        setitemimage("");
-        console.log("Executed");
+    if (itemname && description && type) {
+      console.log("Item image : ", itemimage);
+      const info = new FormData();
+      info.append("name", itemname);
+      info.append("description", description);
+      info.append("question", itemquestion);
+      info.append("type", type);
+      itemimage.map((itemImage) => {
+        info.append("itemPictures", itemImage, itemImage.name);
+      });
+
+      axios({
+        url: "http://localhost:5000/postitem",
+        method: "POST",
+        data: info,
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        withCredentials: true,
+        credentials: "include",
+        onUploadProgress: (ProgressEvent) => {
+          console.log(
+            "Upload progress: " +
+              Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100) +
+              "%"
+          );
+        },
+        // url: "http://localhost:5000/login"
       })
-      .catch((err) => console.log(err));
-      
-    setShow(false);
+        .then((response) => console.log(response))
+        .then(() => {
+          // eslint-disable-next-line no-lone-blocks
+          addToast("Wohoo 🤩! Item listed successfully.", {
+            appearance: "success",
+          });
+          setitemname("");
+          setdescription("");
+          settype("");
+          setitemquestion("");
+          setitemimage([]);
+          console.log("Executed");
+          setShow(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          addToast("Oops 😞! Check internet connection or try again later.", {
+            appearance: "error",
+          });
+        });
+    }
+    else{
+      addToast("Did you missed any of the required fields 🙄?", {
+        appearance: "error",
+      });
+    }
   };
   return (
     <div>
@@ -77,7 +103,7 @@ function Lost_item() {
         <Modal.Body>
           <Form>
             <Form.Group>
-              <Form.Label>Item name</Form.Label>
+              <Form.Label>Item name<span style={{color:"red"}}>*</span></Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter item"
@@ -87,7 +113,7 @@ function Lost_item() {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Description</Form.Label>
+              <Form.Label>Description<span style={{color:"red"}}>*</span></Form.Label>
               <Form.Control
                 as="textarea"
                 placeholder="Enter Description"
@@ -107,8 +133,13 @@ function Lost_item() {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Item type</Form.Label>
-              <Form.Control as="select" required={true} defaultValue="Choose..." onChange={(e)=>settype(e.target.value)}>
+              <Form.Label>Item type<span style={{color:"red"}}>*</span></Form.Label>
+              <Form.Control
+                as="select"
+                required={true}
+                defaultValue="Choose..."
+                onChange={(e) => settype(e.target.value)}
+              >
                 <option>Choose..</option>
                 <option value={"Lost"}>Lost It</option>
                 <option value={"Found"}>Found It</option>
@@ -119,7 +150,14 @@ function Lost_item() {
                 type="file"
                 id="formimage"
                 label="Image input"
-                onChange={(e) => setitemimage(e.target.files[0])}
+                onChange={(e) => {
+                  // console.log(e.target.files)
+                  let { files } = e.target;
+                  lodash.forEach(files, (file) => {
+                    console.log(file);
+                    setitemimage((item) => [...item, file]);
+                  });
+                }}
                 multiple
               />
             </Form.Group>
